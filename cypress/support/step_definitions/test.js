@@ -6,85 +6,69 @@ import { And, Given, Then } from "cypress-cucumber-preprocessor/steps"
 import { pageObjects } from "../PO/pageObjects"
 
 
-let contact, menu
+let credentials
 
 before(() => {
-    cy.fixture('example.json').then(data => (contact = data));
-    cy.fixture('example.json').then(data => (menu = data));
+    cy.fixture('user.json').then(data => (credentials = data));
 });
 
 Given('I navigate to the website', () => {
-    cy.visit('/');
+    cy.visit('https://demo.guru99.com/insurance/v1/index.php');
 })
 
-//Scenario 1
 
-And('I get the Navigation menu list', () => {
-    pageObjects.topNavigationLinks().should('be.visible');
+And('I enter the wrong credentials on Login section', () => {
+    pageObjects.getTextFieldByID("email", credentials.failureCredentials.email)
+    pageObjects.getTextFieldByID("password", credentials.failureCredentials.password)
+    pageObjects.getTextFieldByName("submit");
 })
 
-Then('I validate menu list items and their size', () => {
-    pageObjects.menuValidation(menu);
+Then('I validate the error validation', () => {
+    pageObjects.getBytext("Enter your Email address and password correct");
 })
 
-//Scenario 2
-
-And('I get Description tab and click', () => {
-    pageObjects.clickOnhref('#/');
+And('I enter the proper credentials on Login section', () => {
+    pageObjects.getTextFieldByID("email", credentials.SuccessCredentials.email)
+    pageObjects.getTextFieldByID("password", credentials.SuccessCredentials.password);
+    pageObjects.getTextFieldByName("submit");
 })
 
-Then('I validate content in description page', () => {
-    pageObjects.includeUrl("#/");
-    pageObjects.clickbyheader("h2", "System requirements");
-    pageObjects.getByText("User has abbility to see").should("be.visible");
+Then('I validate the success navigation', () => {
+    pageObjects.getBytext("Broker Insurance WebPage");
+    pageObjects.includeUrl('/header.php')
 })
 
-//Scenario 3
-
-And('I get Add asset tab and click', () => {
-    pageObjects.clickOnhref('#/add');
+When('I validate and enter the data on Request page', () => {
+    cy.requestQuotation()
 })
 
-And('I validate content in Add asset page', () => {
-    pageObjects.includeUrl("#/add");
-    pageObjects.getByText("New Asset").should("be.visible");
+Then('I validate the success message for request Quation', () => {
+    pageObjects.includeUrl('/new_quotation.php');
+    pageObjects.getBytext('You have saved this quotation!');
 })
 
-And('I Add the new asset to the list and validate the success formate', ()=>{
-    pageObjects.getTextfield(pageObjects.generateCorrect);
-    pageObjects.getByText("Correct format")
-    pageObjects.clickByText("Send");
+When('I validate and enter the quotation id', () => {
+    cy.enterQuotationId();
 })
 
-Then('I Validate the success message of new asset adding', ()=>{
-   pageObjects.getByText('Sucssess').should('be.visible');
-   pageObjects.clickByText('Close');    
+Then('I validate the data of existing requested customer', () => {
+    cy.validateExistingRequestedUsaerdata();
 })
 
-//Scenario 4
-And('I get Existing Assets tab and click', () => {
-    pageObjects.clickOnhref('#/assets');
+Then('I validate the profile details which user need to enter', () => {
+    cy.profileDetails();
 })
 
-And('I validate content in Existing Assets page', () => {
-    pageObjects.includeUrl("#/assets");
-    pageObjects.getByText("Existing Assets").should("be.visible");
-    cy.wait(1000);
-    pageObjects.getByText("Show entries").should("be.visible");
-})  
-
-And('I verify the table dropdown selection and number of pages validation', () => {
-    pageObjects.pageDropDown();
+Then('I edit the profile details', () => {
+    cy.EditProfileDetails();
 })
 
-And('I Verify the Searh functionality', () => {
-   pageObjects.searchFunctionality();
-   pageObjects.getByText('Showing 1 to 1 of 1 entries').should("be.visible");
+When('I click on Logout button', () => {
+    pageObjects.logout();
 })
 
-Then('I validate the get assets api response', () => {
-pageObjects.getAPiResponseStutusforGetAssets();
+Then('I validate the Logout button functionality', () => {
+   pageObjects.getBytext('Register');
 })
-
 
 

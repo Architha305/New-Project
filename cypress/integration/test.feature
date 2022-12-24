@@ -1,31 +1,34 @@
-Feature: Home page validations
+Feature:
+    I wanted to validate the Quatation to registered Insurance customer
 
-    I wanted to validate the menu list in home page and tab titles
-
-    Scenario: Navigate to Home page and validate the website content
+    Scenario: Login failure for Insurance customer
         Given I navigate to the website
-        And I get the Navigation menu list
-        Then I validate menu list items and their size
-
-    Scenario: Description tab validation
+        And I enter the wrong credentials on Login section
+        Then I validate the error validation
+    Scenario: Login success for Insurance customer
         Given I navigate to the website
-        And I get Description tab and click
-        Then I validate content in description page
-
-    Scenario: Add asset tab validation for correct formate
+        And I enter the proper credentials on Login section
+        Then I validate the success navigation
+    Scenario: Requesting a Quatation from a customer
         Given I navigate to the website
-        And I get Add asset tab and click
-        And I validate content in Add asset page
-        And I Add the new asset to the list and validate the success formate
-        Then I Validate the success message of new asset adding
-
-    Scenario: Existing asset tab validation
+        And I enter the proper credentials on Login section
+        When I validate and enter the data on Request page
+        Then I validate the success message for request Quation
+    Scenario: Retrieve a Quatation from a customer
         Given I navigate to the website
-        And I get Existing Assets tab and click
-        And I validate content in Existing Assets page
-        And I verify the table dropdown selection and number of pages validation
-        And I Verify the Searh functionality
-        Then I validate the get assets api response
-       
-
-
+        And I enter the proper credentials on Login section
+        When I validate and enter the quotation id
+        Then I validate the data of existing requested customer
+    Scenario: Validate the user profile details
+        Given I navigate to the website
+        And I enter the proper credentials on Login section
+        Then I validate the profile details which user need to enter
+    Scenario: Validate the user profile details
+        Given I navigate to the website
+        And I enter the proper credentials on Login section
+        Then I edit the profile details
+    Scenario: Logout from customer Profile
+        Given I navigate to the website
+        And I enter the proper credentials on Login section
+        When I click on Logout button
+        Then I validate the Logout button functionality

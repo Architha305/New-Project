@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://localhost:3000/#",
+    "baseUrl": "https://demo.guru99.com/insurance/v1/index.php",
     "testFiles": "**/*.feature",
     "experimentalNetworkStubbing": true
 }
